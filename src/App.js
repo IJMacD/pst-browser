@@ -1,25 +1,87 @@
-import logo from './logo.svg';
+import * as PST from 'pst-parser';
 import './App.css';
+import React, { useEffect, useState } from 'react';
+import { MessageView } from './MessageView';
+import { FolderView } from './FolderView';
+import { FolderTree } from './FolderTree';
+import { OpenFilePage } from './OpenFilePage';
 
 function App() {
+  const [ file, setFile ] = useState(/** @type {File?} */(null));
+  const [ pstFile, setPSTFile ] = useState(/** @type {PST.PSTFile?} */(null));
+  const [ selectedFolderNid, setSelectedFolderNid ] = useState(-1);
+  const [ selectedMessageNid, setSelectedMessageNid ] = useState(-1);
+
+  useEffect(() => {
+    if (file) {
+      file.arrayBuffer()
+        .then(buffer => setPSTFile(new PST.PSTFile(buffer)))
+        .catch(e => alert(e.message));
+    }
+    else {
+      setPSTFile(null);
+      setSelectedFolderNid(-1);
+      setSelectedMessageNid(-1);
+    }
+  }, [file]);
+
+  const messageStore = pstFile && pstFile.getMessageStore();
+
+  const selectedFolder = selectedFolderNid > 0 && pstFile?.getFolder(selectedFolderNid);
+  const selectedMessage = selectedMessageNid > 0 && pstFile?.getMessage(selectedMessageNid);
+
+  /**
+   * @param {number} nid
+   */
+  function handleFolderClick (nid) {
+    setSelectedFolderNid(nid);
+    setSelectedMessageNid(-1);
+  }
+
+  if (!pstFile) {
+    if (file) {
+      return (
+        <div className="App">
+          <div style={{alignSelf:"center",textAlign:"center",width:"100%"}}>Loading</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="App">
+        <OpenFilePage onChange={file => setFile(file)} />
+      </div>
+    )
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        messageStore &&
+        <div style={{padding: "1em"}}>
+          <h1>{ messageStore.displayName }</h1>
+          <button onClick={() => setFile(null)}>Close</button>
+          <FolderTree folder={messageStore.getRootFolder()} onClick={handleFolderClick} selectedFolderNid={selectedFolderNid} />
+        </div>
+      }
+      <div style={{flex:1, overflow:"hidden", padding: "1em"}}>
+        {
+          selectedFolder && <FolderView folder={selectedFolder} onClick={nid => setSelectedMessageNid(nid)} selectedMessageNid={selectedMessageNid} />
+        }
+        {
+          selectedMessage && <MessageView message={selectedMessage} />
+        }
+        </div>
     </div>
   );
 }
 
 export default App;
+
+/**
+ * @param {string} subject
+ */
+export function stripSubject (subject) {
+  // eslint-disable-next-line
+  return subject && subject.replace(/[\x01-\x0f]/g, "");
+}

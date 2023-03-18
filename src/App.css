@@ -1,38 +1,80 @@
 .App {
-  text-align: center;
+    display: flex;
+    min-height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.OpenFilePage {
+    flex: 1;
+    background-color: rgb(6, 2, 29);
+    color: white;
+    display: flex;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.OpenFilePage a {
+    color: #8080FF;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.OpenFilePage-Sidebar {
+    width: 160px;
+    background-color: rgb(4, 2, 13);
 }
 
-.App-link {
-  color: #61dafb;
+.OpenFilePage-Sidebar ul {
+    list-style: none;
+    padding: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.OpenFilePage-Sidebar li {
+    display: flex;
+    border-left: 1px solid transparent;
+    margin: 0.5em 0;
+}
+
+.OpenFilePage-Sidebar li:hover {
+    border-left-color: rgba(255,255,255,0.8);
+}
+
+.OpenFilePage-Sidebar button {
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: white;
+    margin: 0 1em;
+    padding: 1em;
+    width: 100%;
+    text-align: left;
+}
+
+.OpenFilePage-Sidebar .active button {
+    border: 1px solid rgba(255,255,255,0.8);
+}
+
+.OpenFilePage-Main {
+    flex: 1;
+    padding: 2em;
+}
+
+.OpenFilePage-Button {
+    display: block;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.05);
+    border-radius: 5px;
+    padding: 0.5em;
+    cursor: pointer;
+}
+.OpenFilePage-Button:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.OpenFilePage-Button span {
+    display: block;
+    font-size: 2em;
+}
+
+
+.OpenFilePage-Button input {
+    display: none;
 }
