@@ -74,7 +74,78 @@
     font-size: 2em;
 }
 
-
 .OpenFilePage-Button input {
     display: none;
+}
+
+.OpenFilePage--Settings h2 {
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid rgba(255,255,255,0.8);
+}
+
+.OpenFilePage--Settings label {
+    display: block;
+}
+
+.OpenFilePage--Settings label span {
+    display: inline-block;
+    width: 320px;
+}
+
+.OpenFilePage--Settings input,
+.OpenFilePage--Settings select
+ {
+    background-color: transparent;
+    color: inherit;
+    padding: 0.25em;
+}
+
+.OpenFilePage--Settings option
+{
+    background-color: white;
+    color: black;
+    padding: 0.25em;
+}
+
+.HeaderBar {
+    display: flex;
+    background-color: #111;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+.HeaderBar button {
+    margin: 0.5em;
+}
+
+.HeaderBar h1 {
+    margin: 0.15em;
+    font-size: 1.4rem;
+}
+
+@media (min-width: 1200px) {
+    .PreviewPane {
+        flex: 1;
+        overflow: hidden;
+        padding: 1em;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .FolderView {
+        width: 320px;
+    }
+
+    .MessageView {
+        flex: 1;
+    }
+}
+
+@media (min-width: 1400px) {
+
+    .FolderView {
+        width: 480px;
+    }
+
 }

@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { stripSubject } from './App';
+import { useSavedState } from './useSavedState';
 import { ValueView } from "./ValueView";
+
+const KEY_DEFAULT_VIEW = "pst-browser.messagePreview.defaultView";
+
 
 /**
  *
@@ -9,7 +13,8 @@ import { ValueView } from "./ValueView";
  * @returns
  */
 export function MessageView({ message }) {
-  const [mode, setMode] = useState("plain");
+  const [mode, setMode] = useSavedState(KEY_DEFAULT_VIEW, "plain");
+  const [ iframeHeight, setIframeHeight ] = useState(800);
 
   const props = message.getAllProperties();
 
@@ -18,7 +23,7 @@ export function MessageView({ message }) {
   }
 
   return (
-    <div>
+    <div className="MessageView">
       <select value={mode} onChange={e => setMode(e.target.value)}>
         <option value="plain">Plain</option>
         <option value="html">HTML</option>
@@ -34,7 +39,12 @@ export function MessageView({ message }) {
             <p style={{ margin: 0, fontFamily: "monospace", whiteSpace: "pre-wrap" }}>{message.body}</p>
           </>}
         {mode === "html" &&
-          <iframe srcDoc={message.bodyHTML} style={{ width: "100%", height: 800 }} title="Message Preview" />}
+          <iframe
+            srcDoc={message.bodyHTML}
+            style={{ width: "100%", height: iframeHeight, border: "none" }}
+            title="Message Preview"
+            onLoad={e => setIframeHeight(e.currentTarget.contentDocument?.documentElement.scrollHeight||800)}
+          />}
         {mode === "html-source" &&
           <pre style={{ whiteSpace: "pre-wrap" }}><code>{message.bodyHTML}</code></pre>}
         {mode === "props" &&

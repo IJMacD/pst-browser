@@ -28,8 +28,8 @@ export function FolderView({ folder, onClick, selectedMessageNid }) {
   const lastPage = Math.floor(folder.contentCount / ITEMS_PER_PAGE);
 
   return (
-    <div>
-      <h2>{folder.displayName}</h2>
+    <div className="FolderView">
+      <h2 style={{margin:0}}>{folder.displayName}</h2>
       <p>Total: {folder.contentCount} Unread: {folder.unreadCount}</p>
       <div>
         <button disabled={page <= 0} onClick={() => setPage(0)}>&lt;&lt;</button>{' '}

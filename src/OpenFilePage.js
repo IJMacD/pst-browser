@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useSavedState } from "./useSavedState";
+
+const KEY_DEFAULT_VIEW = "pst-browser.messagePreview.defaultView";
 
 export function OpenFilePage ({ onChange }) {
     const [ page, setPage ] = useState("open");
+    const [ defaultView, setDefaultView ] = useSavedState(KEY_DEFAULT_VIEW, "plain");
 
     return (
         <div className="OpenFilePage">
@@ -32,9 +36,18 @@ export function OpenFilePage ({ onChange }) {
             }
             {
                 page === "settings" &&
-                <div className="OpenFilePage-Main">
+                <div className="OpenFilePage-Main OpenFilePage--Settings">
                     <h1>Settings</h1>
-                    <p>No settings to adjust currently.</p>
+                    <h2>Message Preview</h2>
+                    <label>
+                        <span>Default Message View</span>
+                        <select value={defaultView} onChange={e => setDefaultView(e.target.value)}>
+                            <option value="plain">Plain</option>
+                            <option value="html">HTML</option>
+                            <option value="html-source">HTML (source)</option>
+                            <option value="props">Properties</option>
+                        </select>
+                    </label>
                 </div>
             }
             {

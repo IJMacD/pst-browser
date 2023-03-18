@@ -16,7 +16,10 @@ function App() {
     if (file) {
       file.arrayBuffer()
         .then(buffer => setPSTFile(new PST.PSTFile(buffer)))
-        .catch(e => alert(e.message));
+        .catch(e => {
+          alert(e.message);
+          setFile(null);
+        });
     }
     else {
       setPSTFile(null);
@@ -55,23 +58,32 @@ function App() {
   }
 
   return (
-    <div className="App">
-      {
-        messageStore &&
-        <div style={{padding: "1em"}}>
-          <h1>{ messageStore.displayName }</h1>
-          <button onClick={() => setFile(null)}>Close</button>
-          <FolderTree folder={messageStore.getRootFolder()} onClick={handleFolderClick} selectedFolderNid={selectedFolderNid} />
-        </div>
-      }
-      <div style={{flex:1, overflow:"hidden", padding: "1em"}}>
+    <div className="App" style={{flexDirection:"column"}}>
+      <div className="HeaderBar">
         {
-          selectedFolder && <FolderView folder={selectedFolder} onClick={nid => setSelectedMessageNid(nid)} selectedMessageNid={selectedMessageNid} />
+          messageStore &&
+          <>
+            <button onClick={() => setFile(null)}>Close</button>
+            <h1>{ messageStore.displayName }</h1>
+          </>
         }
+      </div>
+      <div style={{display:"flex"}}>
         {
-          selectedMessage && <MessageView message={selectedMessage} />
+          messageStore &&
+          <div style={{padding: "1em", width: 320}}>
+            <FolderTree folder={messageStore.getRootFolder()} onClick={handleFolderClick} selectedFolderNid={selectedFolderNid} />
+          </div>
         }
+        <div className="PreviewPane">
+          {
+            selectedFolder && <FolderView folder={selectedFolder} onClick={nid => setSelectedMessageNid(nid)} selectedMessageNid={selectedMessageNid} />
+          }
+          {
+            selectedMessage && <MessageView message={selectedMessage} />
+          }
         </div>
+      </div>
     </div>
   );
 }
