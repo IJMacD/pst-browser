@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/pst-browser/static/css/main.d02fe157.css",
+    "main.js": "/pst-browser/static/js/main.48d4b44b.js",
+    "index.html": "/pst-browser/index.html",
+    "main.d02fe157.css.map": "/pst-browser/static/css/main.d02fe157.css.map",
+    "main.48d4b44b.js.map": "/pst-browser/static/js/main.48d4b44b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d02fe157.css",
+    "static/js/main.48d4b44b.js"
+  ]
+}
