@@ -59,8 +59,7 @@ export function OpenFilePage ({ onChange, fileHistory }) {
     }
 
     const remainingOlderHistory = olderFileHistory
-        .filter(file => !fileHistory.some(other => areFilesEqual(file, other)))
-        .reverse();
+        .filter(file => !fileHistory.some(other => areFilesEqual(file, other)));
 
     return (
         <div className="OpenFilePage" onDragEnter={handleDrag} onDragOver={handleDrag} onDragLeave={handleDragEnd} onDrop={handleDrop}>

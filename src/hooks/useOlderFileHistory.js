@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { PromiseIDB } from "../PromiseIDB";
 
 /**
  * @typedef SavedFile
@@ -8,21 +9,24 @@ import { useState, useEffect } from "react";
  */
 
 /**
+ * @param {IDBDatabase} db
+ */
+function onUpgradeNeeded (db) {
+    db.createObjectStore("files");
+}
+
+/**
  * @returns {[SavedFile[], (file: SavedFile) => void, (file: SavedFile) => void]}
  */
 export function useOlderFileHistory () {
     const [ olderFileHistory, setOlderFileHistory ] = useState(/** @type {SavedFile[]} */([]));
 
+
     useEffect(() => {
-        const request = indexedDB.open("FileHistory");
-        request.onsuccess = () => {
-            const db = request.result;
-            const transaction = db.transaction("files", "readonly");
-            const req = transaction.objectStore("files").getAll();
-            req.onsuccess = () => {
-                setOlderFileHistory(req.result);
-            };
-        };
+        PromiseIDB("FileHistory", onUpgradeNeeded).then(db => {
+            db.objectStore("files", "readonly").getAll()
+                .then(setOlderFileHistory);
+        });
     }, []);
 
     /**
@@ -30,37 +34,22 @@ export function useOlderFileHistory () {
      */
     function saveFile (file) {
         const key = `${file.name}_${file.size}`;
-        const r = indexedDB.open("FileHistory", 1);
-        r.onupgradeneeded = () => {
-            const db = r.result;
-            db.createObjectStore("files");
-        };
-        r.onsuccess = () => {
-            const db = r.result;
-            const transaction = db.transaction("files", "readwrite");
-            transaction.objectStore("files").add(file, key);
-        };
+
+        PromiseIDB("FileHistory", onUpgradeNeeded).then(db => {
+            db.objectStore("files", "readwrite").add(file, key);
+        });
     }
 
     /**
      * @param {SavedFile} file
      */
     function deleteFile (file) {
-        const r = indexedDB.open("FileHistory", 1);
-        r.onupgradeneeded = () => {
-            const db = r.result;
-            db.createObjectStore("files");
-        };
-        r.onsuccess = () => {
-            const db = r.result;
-            const transaction = db.transaction("files", "readwrite");
-            const key = `${file.name}_${file.size}`;
-            transaction.objectStore("files").delete(key);
-            const req = transaction.objectStore("files").getAll();
-            req.onsuccess = () => {
-                setOlderFileHistory(req.result);
-            };
-        };
+        const key = `${file.name}_${file.size}`;
+        PromiseIDB("FileHistory", onUpgradeNeeded).then(async db => {
+            const objectStore = db.objectStore("files", "readwrite");
+            await objectStore.delete(key);
+            objectStore.getAll().then(setOlderFileHistory);
+        });
     }
 
     return [ olderFileHistory, saveFile, deleteFile ];
