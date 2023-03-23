@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { stripSubject } from './App';
-import { useSavedState } from './useSavedState';
+import React, { useEffect, useRef, useState } from 'react';
+import { stripSubject } from "../util/stripSubject";
+import { useSavedState } from '../hooks/useSavedState';
 import { ValueView } from "./ValueView";
 
 const KEY_DEFAULT_VIEW = "pst-browser.messagePreview.defaultView";
-
 
 /**
  *
@@ -15,6 +14,12 @@ const KEY_DEFAULT_VIEW = "pst-browser.messagePreview.defaultView";
 export function MessageView({ message }) {
   const [mode, setMode] = useSavedState(KEY_DEFAULT_VIEW, "plain");
   const [ iframeHeight, setIframeHeight ] = useState(800);
+  /** @type {import('react').MutableRefObject<HTMLDivElement?>} */
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    containerRef.current?.scroll(0, 0);
+  }, [message]);
 
   const props = message.getAllProperties();
 
@@ -23,7 +28,7 @@ export function MessageView({ message }) {
   }
 
   return (
-    <div className="MessageView">
+    <div className="MessageView" ref={containerRef}>
       <select value={mode} onChange={e => setMode(e.target.value)}>
         <option value="plain">Plain</option>
         <option value="html">HTML</option>
@@ -33,10 +38,10 @@ export function MessageView({ message }) {
       <h3>{stripSubject(message.subject)}</h3>
       <p style={{ margin: 0 }}>From: {props.senderName}</p>
       <p style={{ margin: 0 }}>To: {props.receivedByName}</p>
-      <div style={{overflow:"auto"}}>
+      <div style={{wordBreak:"break-word"}}>
         {mode === "plain" &&
           <>
-            <p style={{ margin: 0, fontFamily: "monospace", whiteSpace: "pre-wrap" }}>{message.body}</p>
+            <p style={{ margin: 0, fontFamily: "monospace", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{message.body}</p>
           </>}
         {mode === "html" &&
           <iframe
@@ -46,7 +51,7 @@ export function MessageView({ message }) {
             onLoad={e => setIframeHeight(e.currentTarget.contentDocument?.documentElement.scrollHeight||800)}
           />}
         {mode === "html-source" &&
-          <pre style={{ whiteSpace: "pre-wrap" }}><code>{message.bodyHTML}</code></pre>}
+          <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}><code>{message.bodyHTML}</code></pre>}
         {mode === "props" &&
           <dl style={{ fontFamily: "monospace" }}>
             {Object.entries(props).map(([key, value]) => (

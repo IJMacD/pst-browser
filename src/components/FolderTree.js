@@ -1,4 +1,5 @@
 import React from 'react';
+import "./FolderTree.css";
 
 /**
  * @param {object} props
@@ -11,10 +12,10 @@ export function FolderTree({ folder, onClick, selectedFolderNid }) {
     return null;
 
   return (
-    <div>
-      <p onClick={() => onClick(folder.nid)} style={{ margin: 0, cursor: "pointer", fontWeight: selectedFolderNid === folder.nid ? "bold" : "normal" }}>{folder.displayName} ({folder.contentCount})</p>
+    <div className={`FolderTree ${folder.hasSubfolders ? "FolderTree-Parent" : ""} ${selectedFolderNid === folder.nid ? "FolderTree--selected" : ""}`}>
+      <p onClick={() => onClick(folder.nid)}>{folder.displayName} ({folder.contentCount})</p>
       {folder.hasSubfolders && (
-        <ul style={{ margin: 0 }}>
+        <ul>
           {folder.getSubFolderEntries().map(f => <li key={f.nid}><FolderTree folder={folder.getSubFolder(f.nid)} onClick={onClick} selectedFolderNid={selectedFolderNid} /></li>)}
         </ul>
       )}

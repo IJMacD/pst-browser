@@ -1,0 +1,38 @@
+.MessageTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.MessageTable th {
+    border: 1px solid #CCC;
+    background: #F8F8F8;
+}
+
+.MessageTable td {
+    border: 1px solid #CCC;
+}
+
+@media (min-width: 1200px) or (max-width: 768px) {
+
+    .MessageTable tr {
+        display: block;
+        border-bottom: 1px solid #CCC;
+        min-height: 4em;
+        padding: 0.5em 0;
+    }
+
+    .MessageTable thead {
+        display: none;
+    }
+
+    .MessageTable td {
+        display: block;
+        border: none;
+        min-height: 1.3em;
+    }
+
+    .MessageTable .date {
+        font-size: 0.8em;
+        font-weight: normal;
+    }
+}

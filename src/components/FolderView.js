@@ -3,7 +3,7 @@ import { MessageTable } from './MessageTable';
 
 /**
  * @param {object} props
- * @param {PST.Folder?} props.folder
+ * @param {import("pst-parser").Folder?} props.folder
  * @param {(nid: number) => void} props.onClick
  * @param {number} [props.selectedMessageNid]
  */

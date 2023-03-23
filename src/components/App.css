@@ -1,0 +1,68 @@
+.App {
+    display: flex;
+    min-height: 100vh;
+}
+
+@media (min-height: 800px) {
+    .App {
+        height: 100vh;
+    }
+}
+
+.HeaderBar {
+    display: flex;
+    background-color: #111;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+.HeaderBar button {
+    margin: 0.5em;
+}
+
+.HeaderBar h1 {
+    margin: 0.15em;
+    font-size: 1.4rem;
+}
+
+.App-FolderPane {
+    padding: 1em;
+    flex: 0;
+    min-width: 320px;
+    overflow-y: scroll;
+}
+
+.App-PreviewPane {
+    flex: 1;
+    overflow: auto;
+}
+
+@media (min-width: 1200px) {
+    .App-PreviewPane {
+        display: flex;
+        overflow: hidden;
+        flex-direction: row;
+    }
+
+    .FolderView {
+        flex: 0;
+        min-width: 360px;
+        padding: 1em;
+        overflow-y: scroll;
+    }
+
+    .MessageView {
+        flex: 1;
+        padding: 1em;
+        overflow: auto;
+    }
+}
+
+@media (min-width: 1440px) {
+
+    .FolderView {
+        width: 520px;
+    }
+
+}

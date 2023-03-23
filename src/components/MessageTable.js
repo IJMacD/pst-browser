@@ -1,5 +1,6 @@
 import React from 'react';
-import { stripSubject } from './App';
+import { stripSubject } from "../util/stripSubject";
+import "./MessageTable.css";
 
 /**
  * @param {object} props
@@ -10,15 +11,12 @@ import { stripSubject } from './App';
 
 export function MessageTable({ messages, onClick, selectedMessageNid }) {
 
-  const tdStyle = { border: "1px solid #CCC" };
-  const thStyle = { border: "1px solid #CCC", background: "#F8F8F8" };
-
   return (
-    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+    <table className="MessageTable">
       <thead>
         <tr>
-          <th style={thStyle}>Subject</th>
-          <th style={thStyle}>Date</th>
+          <th>Subject</th>
+          <th>Date</th>
         </tr>
       </thead>
       <tbody>
@@ -33,8 +31,8 @@ export function MessageTable({ messages, onClick, selectedMessageNid }) {
               }}
               onClick={() => onClick(msg.nid)}
             >
-              <td style={tdStyle}>{stripSubject(msg.subject)}</td>
-              <td style={tdStyle}>{msg.messageDeliveryTime.toISOString()}</td>
+              <td className="subject">{stripSubject(msg.subject)}</td>
+              <td className="date">{msg.messageDeliveryTime.toISOString()}</td>
             </tr>
           );
         })}

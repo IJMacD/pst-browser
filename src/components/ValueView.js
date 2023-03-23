@@ -30,5 +30,5 @@ export function ValueView({ value }) {
  * @param {ArrayBuffer} props.buffer
  */
 function BufferView ({ buffer }) {
-  return <span>{[...new Uint8Array(buffer)].map(v => v.toString(16).toUpperCase().padStart(2, "0")).join(" ")}</span>
+  return <>{[...new Uint8Array(buffer)].map(v => v.toString(16).toUpperCase().padStart(2, "0")).join(" ")}</>
 }

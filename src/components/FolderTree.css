@@ -1,0 +1,30 @@
+.FolderTree p {
+    margin: 0;
+    cursor: pointer;
+    padding-left: 2em;
+}
+
+.FolderTree p:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.FolderTree > p::before {
+    content: "📁";
+    width: 2em;
+    display: inline-block;
+    margin-left: -2em;
+}
+
+.FolderTree--selected > p {
+    font-weight: bold;
+}
+
+.FolderTree--selected > p::before {
+    content: "📂";
+}
+
+.FolderTree ul {
+    margin: 0;
+    padding-left: 1em;
+    list-style: none;
+}

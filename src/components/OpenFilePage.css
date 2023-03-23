@@ -1,7 +1,3 @@
-.App {
-    display: flex;
-    min-height: 100vh;
-}
 
 .OpenFilePage {
     flex: 1;
@@ -52,12 +48,15 @@
 .OpenFilePage-Main {
     flex: 1;
     padding: 2em;
+    overflow: auto;
 }
 
 .OpenFilePage-Button {
     display: block;
-    width: 80px;
-    height: 80px;
+    color: inherit;
+    font-size: inherit;
+    width: 100px;
+    height: 100px;
     text-align: center;
     border: 1px solid rgba(255,255,255,0.8);
     background-color: rgba(255,255,255,0.05);
@@ -68,14 +67,21 @@
 .OpenFilePage-Button:hover {
     background-color: rgba(255,255,255,0.1);
 }
+.OpenFilePage-Button:focus-within {
+    outline: 2px solid white;
+}
 
 .OpenFilePage-Button span {
     display: block;
     font-size: 2em;
 }
 
-.OpenFilePage-Button input {
-    display: none;
+.visually-hidden {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
 }
 
 .OpenFilePage--Settings h2 {
@@ -107,45 +113,54 @@
     padding: 0.25em;
 }
 
-.HeaderBar {
-    display: flex;
-    background-color: #111;
-    color: white;
-    position: sticky;
+.OpenFilePage-DragOverlay {
+    position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.25);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.HeaderBar button {
-    margin: 0.5em;
+.OpenFilePage-RecentList {
+    list-style: none;
+    padding: 0;
 }
 
-.HeaderBar h1 {
-    margin: 0.15em;
-    font-size: 1.4rem;
+.OpenFilePage-RecentList li {
+    padding: 0.5em 1em;
+    border-bottom: 1px solid #FFFFDD;
+    cursor: default;
+    user-select: none;
 }
 
-@media (min-width: 1200px) {
-    .PreviewPane {
-        flex: 1;
-        overflow: hidden;
-        padding: 1em;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .FolderView {
-        width: 320px;
-    }
-
-    .MessageView {
-        flex: 1;
-    }
+.OpenFilePage-RecentList li:hover {
+    background-color: rgba(255,255,255,0.1);
 }
 
-@media (min-width: 1400px) {
+.RecentFileListItem {
+    display: flex;
+}
 
-    .FolderView {
-        width: 480px;
-    }
+.RecentFileListItem div {
+    flex: 1;
+}
 
+.RecentFileListItem span {
+    font-size: 0.8em;
+}
+
+.RecentFileListItem button {
+    background: none;
+    border: none;
+    color: white;
+    width: 3em;
+}
+
+.RecentFileListItem button:hover {
+    background: rgba(255,255,255,0.2);
 }
