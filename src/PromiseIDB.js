@@ -24,12 +24,12 @@ export class PromiseObjectStore {
 
     /**
      * @param {IDBDatabase} db
-     * @param {string} objectStore
+     * @param {string} objectStoreName
      * @param {"readonly"|"readwrite"} mode
      */
-    constructor(db, objectStore, mode) {
-        const transaction = db.transaction(objectStore, mode);
-        this.#objectStore = transaction.objectStore(objectStore);
+    constructor(db, objectStoreName, mode) {
+        const transaction = db.transaction(objectStoreName, mode);
+        this.#objectStore = transaction.objectStore(objectStoreName);
     }
 
     /**
@@ -100,10 +100,10 @@ export class PromiseObjectStore {
 
     /**
      * @param {string} name
-     * @returns {IDBIndex}
+     * @returns {PromiseIndex}
      */
     index(name) {
-        return this.#objectStore.index(name);
+        return new PromiseIndex(this.#objectStore.index(name));
     }
 
     /**
@@ -132,6 +132,83 @@ export class PromiseObjectStore {
     put(value, key) {
         return wrapPromise(this.#objectStore.put(value, key));
     }
+}
+
+export class PromiseIndex {
+    #index;
+
+    get keyPath() { return this.#index.keyPath; }
+    get multiEntry() { return this.#index.multiEntry; }
+    get name() { return this.#index.name; }
+    get unique() { return this.#index.unique; }
+
+    /**
+     * @param {IDBIndex} index
+     */
+    constructor (index) {
+        this.#index = index;
+    }
+
+    /**
+     * @param {IDBValidKey|IDBKeyRange} [query]
+     * @returns {Promise<number>}
+     */
+    count(query) {
+        return wrapPromise(this.#index.count(query));
+    }
+
+    /**
+     * @param {IDBValidKey|IDBKeyRange} query
+     * @returns {Promise<any>}
+     */
+    get(query) {
+        return wrapPromise(this.#index.get(query));
+    }
+
+    /**
+     * @param {IDBValidKey|IDBKeyRange|null} [query]
+     * @param {number} [count]
+     * @returns {Promise<any[]>}
+     */
+    getAll(query, count) {
+        return wrapPromise(this.#index.getAll(query, count));
+    }
+
+    /**
+     * @param {IDBValidKey|IDBKeyRange|null} [query]
+     * @param {number} [count]
+     * @returns {Promise<IDBValidKey[]>}
+     */
+    getAllKeys(query, count) {
+        return wrapPromise(this.#index.getAllKeys(query, count));
+    }
+
+    /**
+     * @param {IDBValidKey|IDBKeyRange} query
+     * @returns {Promise<IDBValidKey|undefined>}
+     */
+    getKey(query) {
+        return wrapPromise(this.#index.getKey(query));
+    }
+
+    /**
+     * @param {IDBValidKey|IDBKeyRange|null} [query]
+     * @param {IDBCursorDirection} [direction]
+     * @returns {Promise<IDBCursorWithValue|undefined>}
+     */
+    openCursor(query, direction) {
+        return wrapPromise(this.#index.openCursor(query, direction));
+    }
+
+    /**
+     * @param {IDBValidKey|IDBKeyRange|null} [query]
+     * @param {IDBCursorDirection} [direction]
+     * @returns {Promise<IDBCursor|null>}
+     */
+    openKeyCursor(query, direction) {
+        return wrapPromise(this.#index.openKeyCursor(query, direction));
+    }
+
 }
 
 /**

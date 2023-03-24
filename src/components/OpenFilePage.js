@@ -8,6 +8,10 @@ import "./OpenFilePage.css";
 
 const KEY_DEFAULT_VIEW = "pst-browser.messagePreview.defaultView";
 
+/**
+ * @typedef {import("../hooks/useOlderFileHistory").SavedFile} SavedFile
+ */
+
 
 /**
  * @param {object} props
@@ -47,19 +51,38 @@ export function OpenFilePage ({ onChange, fileHistory }) {
         e.stopPropagation();
         const file = e.dataTransfer.files[0];
 
-        onChange(file || null);
-
         if (file) {
             const { name, size } = file;
             // @ts-ignore
             e.dataTransfer.items[0].getAsFileSystemHandle().then(handle => {
-                saveFileHistory({handle, name, size});
+                handleOpen({ handle, name, size, lastOpenDate: new Date() });
             });
         }
     }
 
     const remainingOlderHistory = olderFileHistory
         .filter(file => !fileHistory.some(other => areFilesEqual(file, other)));
+
+    /**
+     * @param {File|SavedFile|null} file
+     */
+    async function handleOpen (file) {
+        if (file instanceof File) {
+            onChange(file);
+        }
+        else if (file) {
+            // @ts-ignore
+            const permission = await file.handle.requestPermission();
+            if (permission === "granted") {
+                onChange(await file.handle.getFile());
+                // Update last opened date
+                saveFileHistory({ ...file, lastOpenDate: new Date() });
+            }
+        }
+        else {
+            onChange(null);
+        }
+    }
 
     return (
         <div className="OpenFilePage" onDragEnter={handleDrag} onDragOver={handleDrag} onDragLeave={handleDragEnd} onDrop={handleDrop}>
@@ -81,11 +104,11 @@ export function OpenFilePage ({ onChange, fileHistory }) {
                 <div className="OpenFilePage-Main">
                     <h1>PST File Browser</h1>
                     <p>Choose a <code>.pst</code> file on your computer to get started.</p>
-                    <FilePickerButton onChange={onChange} saveFileHistory={saveFileHistory} />
+                    <FilePickerButton onChange={handleOpen} />
                     <h2>Recent Files</h2>
                     <ol className="OpenFilePage-RecentList">
                         {
-                            fileHistory.map((file, i) => <RecentFileListItem key={i} file={file} onClick={() => onChange(file)} />)
+                            fileHistory.map((file, i) => <RecentFileListItem key={i} file={file} onClick={() => handleOpen(file)} />)
                         }
                     </ol>
                     {
@@ -95,18 +118,13 @@ export function OpenFilePage ({ onChange, fileHistory }) {
                             <ol className="OpenFilePage-RecentList">
                                 {
                                     remainingOlderHistory
-                                    .map((file, i) => (
+                                    .reverse()
+                                    .map((savedFile, i) => (
                                         <RecentFileListItem
                                             key={i}
-                                            file={file}
-                                            onClick={async () => {
-                                                // @ts-ignore
-                                                const permission = await file.handle.requestPermission();
-                                                if (permission === "granted") {
-                                                    onChange(await file.handle.getFile());
-                                                }
-                                            }}
-                                            onDelete={() => deleteFileHistory(file)}
+                                            file={savedFile}
+                                            onClick={() => handleOpen(savedFile)}
+                                            onDelete={() => deleteFileHistory(savedFile)}
                                         />
                                     ))
                                 }

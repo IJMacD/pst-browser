@@ -5,6 +5,7 @@ import { PromiseIDB } from "../PromiseIDB";
  * @typedef SavedFile
  * @property {string} name
  * @property {number} size
+ * @property {Date} lastOpenDate
  * @property {FileSystemFileHandle} handle
  */
 
@@ -12,7 +13,8 @@ import { PromiseIDB } from "../PromiseIDB";
  * @param {IDBDatabase} db
  */
 function onUpgradeNeeded (db) {
-    db.createObjectStore("files");
+    const objectStore = db.createObjectStore("files");
+    objectStore.createIndex("recentlyOpened", "lastOpenDate");
 }
 
 /**
@@ -24,8 +26,11 @@ export function useOlderFileHistory () {
 
     useEffect(() => {
         PromiseIDB("FileHistory", onUpgradeNeeded).then(db => {
-            db.objectStore("files", "readonly").getAll()
-                .then(setOlderFileHistory);
+            db.objectStore("files", "readonly")
+                .index("recentlyOpened")
+                .getAll()
+                .then(setOlderFileHistory)
+                .catch(console.log);
         });
     }, []);
 
@@ -36,7 +41,7 @@ export function useOlderFileHistory () {
         const key = `${file.name}_${file.size}`;
 
         PromiseIDB("FileHistory", onUpgradeNeeded).then(db => {
-            db.objectStore("files", "readwrite").add(file, key);
+            db.objectStore("files", "readwrite").put(file, key);
         });
     }
 
@@ -48,7 +53,7 @@ export function useOlderFileHistory () {
         PromiseIDB("FileHistory", onUpgradeNeeded).then(async db => {
             const objectStore = db.objectStore("files", "readwrite");
             await objectStore.delete(key);
-            objectStore.getAll().then(setOlderFileHistory);
+            objectStore.index("recentlyOpened").getAll().then(setOlderFileHistory);
         });
     }
 

@@ -1,13 +1,16 @@
 import React from "react";
 
 /**
+ * @typedef {import("../hooks/useOlderFileHistory").SavedFile} SavedFile
+ */
+
+/**
  *
  * @param {object} props
- * @param {(file: File?) => void} props.onChange
- * @param {(savedFile: import("./hooks/useOlderFileHistory").SavedFile) => void} props.saveFileHistory
+ * @param {(file: (File|SavedFile)?) => void} props.onChange
  * @returns
  */
-export function FilePickerButton({ onChange, saveFileHistory }) {
+export function FilePickerButton({ onChange }) {
     if (window.showOpenFilePicker) {
         return (
             <button
@@ -17,8 +20,7 @@ export function FilePickerButton({ onChange, saveFileHistory }) {
                     const [handle] = await window.showOpenFilePicker({ types: [{ description: "PST Files", accept: { "application/octet": [".pst"] } }] });
                     const file = await handle.getFile();
                     const { name, size } = file;
-                    saveFileHistory({ handle, name, size });
-                    onChange(file);
+                    onChange({ handle, name, size, lastOpenDate: new Date() });
                 }}
             >
                 <span>📂</span>
