@@ -32,7 +32,7 @@ export function MessageTable({ messages, onClick, selectedMessageNid }) {
               onClick={() => onClick(msg.nid)}
             >
               <td className="subject">{stripSubject(msg.subject)}</td>
-              <td className="date">{msg.messageDeliveryTime.toISOString()}</td>
+              <td className="date">{msg.messageDeliveryTime?.toISOString()}</td>
             </tr>
           );
         })}
