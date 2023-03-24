@@ -21,14 +21,17 @@ export function MessageTable({ messages, onClick, selectedMessageNid }) {
       </thead>
       <tbody>
         {messages.map(msg => {
+
+          const className = [
+            "MessageTable-Row",
+            selectedMessageNid === msg.nid ? "MessageTable-Row--selected" : "",
+            msg.messageFlags ? "MessageTable-Row--read" : "MessageTable-Row--unread",
+          ].join(" ");
+
           return (
             <tr
               key={msg.nid}
-              style={{
-                fontWeight: msg.messageFlags ? "normal" : "bold",
-                cursor: "pointer",
-                backgroundColor: selectedMessageNid === msg.nid ? "#FFFFC0" : "transparent"
-              }}
+              className={className}
               onClick={() => onClick(msg.nid)}
             >
               <td className="subject">{stripSubject(msg.subject)}</td>

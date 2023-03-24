@@ -38,6 +38,14 @@
     overflow: auto;
 }
 
+.MessageView select {
+    padding: 0.5em;
+}
+
+button {
+    padding: 0.5em;
+}
+
 @media (min-width: 1200px) {
     .App-PreviewPane {
         display: flex;
@@ -65,4 +73,28 @@
         width: 520px;
     }
 
+}
+
+@media (prefers-color-scheme: dark) {
+    .App {
+        background-color: #111;
+        color: #CCC;
+    }
+    .HeaderBar {
+        background-color: #333;
+    }
+    select,
+    button
+    {
+        background-color: #111;
+        border: 1px solid #CCC;
+        color: #CCC;
+    }
+    button:hover {
+        background-color: #555;
+    }
+    button:disabled {
+        background-color: #333;
+        color: #999;
+    }
 }

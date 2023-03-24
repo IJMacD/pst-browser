@@ -12,7 +12,20 @@
     border: 1px solid #CCC;
 }
 
+.MessageTable-Row {
+    cursor: pointer;
+}
+.MessageTable-Row--unread {
+    font-weight: bold;
+}
+.MessageTable-Row--selected {
+    background-color: #FFFFC0;
+}
+
 @media (min-width: 1200px) or (max-width: 768px) {
+    .MessageTable {
+        margin-top: 0.5em;
+    }
 
     .MessageTable tr {
         display: block;
@@ -35,4 +48,11 @@
         font-size: 0.8em;
         font-weight: normal;
     }
+}
+
+@media (prefers-color-scheme: dark) {
+    .MessageTable-Row--selected {
+        background-color: #444;
+    }
+
 }
