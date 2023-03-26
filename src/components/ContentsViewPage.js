@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { FolderTree } from "./FolderTree";
 import { FolderView } from "./FolderView";
 import { MessageView } from "./MessageView";
@@ -32,23 +33,25 @@ export function ContentsViewPage ({ messageStore, onClose }) {
                 <h1>{ messageStore.displayName }</h1>
             </div>
             <div style={{display:"flex",flex: 1,overflow:"hidden"}}>
-                <div className="App-FolderPane">
-                    <FolderTree folder={messageStore.getRootFolder()} onClick={handleFolderClick} selectedFolderNid={selectedFolderNid} />
-                </div>
-                <div className="App-PreviewPane">
-                {
-                    selectedFolder &&
-                    <FolderView
+                <ErrorBoundary>
+                    <div className="App-FolderPane">
+                        <FolderTree folder={messageStore.getRootFolder()} onClick={handleFolderClick} selectedFolderNid={selectedFolderNid} />
+                    </div>
+                    <div className="App-PreviewPane">
+                    {
+                        selectedFolder &&
+                        <FolderView
                         folder={selectedFolder}
                         onClick={nid => setSelectedMessageNid(nid)}
                         selectedMessageNid={selectedMessageNid}
-                    />
-                }
-                {
-                    selectedMessage &&
-                    <MessageView message={selectedMessage} />
-                }
-                </div>
+                        />
+                    }
+                    {
+                        selectedMessage &&
+                        <MessageView message={selectedMessage} />
+                    }
+                    </div>
+                </ErrorBoundary>
             </div>
       </>
     )
