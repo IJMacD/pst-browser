@@ -1,5 +1,5 @@
+import { MF_HAS_ATTACH, MF_READ } from 'pst-parser/src/messaging/MessageFlags';
 import React from 'react';
-import { stripSubject } from "../util/stripSubject";
 import "./MessageTable.css";
 
 /**
@@ -25,7 +25,7 @@ export function MessageTable({ messages, onClick, selectedMessageNid }) {
           const className = [
             "MessageTable-Row",
             selectedMessageNid === msg.nid ? "MessageTable-Row--selected" : "",
-            msg.messageFlags ? "MessageTable-Row--read" : "MessageTable-Row--unread",
+            msg.messageFlags & MF_READ ? "MessageTable-Row--read" : "MessageTable-Row--unread",
           ].join(" ");
 
           return (
@@ -34,7 +34,7 @@ export function MessageTable({ messages, onClick, selectedMessageNid }) {
               className={className}
               onClick={() => onClick(msg.nid)}
             >
-              <td className="subject">{stripSubject(msg.subject)}</td>
+              <td className="subject">{msg.subject} {msg.messageFlags & MF_HAS_ATTACH ? "🔗" :""}</td>
               <td className="date">{msg.messageDeliveryTime?.toISOString()}</td>
             </tr>
           );
