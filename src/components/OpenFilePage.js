@@ -64,19 +64,21 @@ export function OpenFilePage ({ onChange, fileHistory }) {
         .filter(file => !fileHistory.some(other => areFilesEqual(file, other)));
 
     /**
-     * @param {File|SavedFile|null} file
+     * @param {File|SavedFile|null} fileOrSavedFile
      */
-    async function handleOpen (file) {
-        if (file instanceof File) {
-            onChange(file);
+    async function handleOpen (fileOrSavedFile) {
+        if (fileOrSavedFile instanceof File) {
+            onChange(fileOrSavedFile);
         }
-        else if (file) {
+        else if (fileOrSavedFile) {
             // @ts-ignore
-            const permission = await file.handle.requestPermission();
+            const permission = await fileOrSavedFile.handle.requestPermission();
             if (permission === "granted") {
-                onChange(await file.handle.getFile());
-                // Update last opened date
-                saveFileHistory({ ...file, lastOpenDate: new Date() });
+                const file = await fileOrSavedFile.handle.getFile();
+                onChange(file);
+                const { size } = file;
+                // Update size (if necessary) and last opened date
+                saveFileHistory({ ...fileOrSavedFile, size, lastOpenDate: new Date() });
             }
         }
         else {

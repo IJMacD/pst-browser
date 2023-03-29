@@ -14,6 +14,8 @@ export function ValueView({ value }) {
       );
     }
 
+    if (!value) return null;
+
     return <span>{value.toString()}</span>;
   }
 

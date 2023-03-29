@@ -38,7 +38,7 @@ export function useOlderFileHistory () {
      * @param {SavedFile} file
      */
     function saveFile (file) {
-        const key = `${file.name}_${file.size}`;
+        const key = `${file.name}`;
 
         PromiseIDB("FileHistory", onUpgradeNeeded).then(db => {
             db.objectStore("files", "readwrite").put(file, key);
@@ -49,7 +49,7 @@ export function useOlderFileHistory () {
      * @param {SavedFile} file
      */
     function deleteFile (file) {
-        const key = `${file.name}_${file.size}`;
+        const key = `${file.name}`;
         PromiseIDB("FileHistory", onUpgradeNeeded).then(async db => {
             const objectStore = db.objectStore("files", "readwrite");
             await objectStore.delete(key);
