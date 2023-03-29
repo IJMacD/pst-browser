@@ -9,13 +9,6 @@ import { PromiseIDB } from "../PromiseIDB";
  * @property {FileSystemFileHandle} handle
  */
 
-/**
- * @param {IDBDatabase} db
- */
-function onUpgradeNeeded (db) {
-    const objectStore = db.createObjectStore("files");
-    objectStore.createIndex("recentlyOpened", "lastOpenDate");
-}
 
 /**
  * @returns {[SavedFile[], (file: SavedFile) => void, (file: SavedFile) => void]}
@@ -23,9 +16,15 @@ function onUpgradeNeeded (db) {
 export function useOlderFileHistory () {
     const [ olderFileHistory, setOlderFileHistory ] = useState(/** @type {SavedFile[]} */([]));
 
+    function getDB() {
+        return PromiseIDB("FileHistory", (db) => {
+            const objectStore = db.createObjectStore("files");
+            objectStore.createIndex("recentlyOpened", "lastOpenDate");
+        });
+    }
 
     useEffect(() => {
-        PromiseIDB("FileHistory", onUpgradeNeeded).then(db => {
+        getDB().then(db => {
             db.objectStore("files", "readonly")
                 .index("recentlyOpened")
                 .getAll()
@@ -40,7 +39,7 @@ export function useOlderFileHistory () {
     function saveFile (file) {
         const key = `${file.name}`;
 
-        PromiseIDB("FileHistory", onUpgradeNeeded).then(db => {
+        getDB().then(db => {
             db.objectStore("files", "readwrite").put(file, key);
         });
     }
@@ -50,7 +49,7 @@ export function useOlderFileHistory () {
      */
     function deleteFile (file) {
         const key = `${file.name}`;
-        PromiseIDB("FileHistory", onUpgradeNeeded).then(async db => {
+        getDB().then(async db => {
             const objectStore = db.objectStore("files", "readwrite");
             await objectStore.delete(key);
             objectStore.index("recentlyOpened").getAll().then(setOlderFileHistory);
