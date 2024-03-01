@@ -7466,10 +7466,10 @@ psl@^1.1.33:
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.9.0.tgz#d0df2a137f00794565fcaf3b2c00cd09f8d5a5a7"
   integrity sha512-E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag==
 
-pst-parser@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/pst-parser/-/pst-parser-0.0.2.tgz#830bc97a6ad42fa019c7f480ea2b0672e53310d3"
-  integrity sha512-8q24KucIdyKg6/v39eB5d5zbnl8vntnt/9WyTdBgtu4XV4MJO7hgDUz0G7jRVtPHxC53+aQ1o1AjRe1X7fRBVw==
+pst-parser@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/pst-parser/-/pst-parser-0.0.6.tgz#6352721ec204434299e2bbf6fdd56e594631fc80"
+  integrity sha512-HqBoI1jMZqCEtMirwqjr6Q4SAteXIAkvegacn50/+IbZv7kEAUQAgXUzYhCzcZFT4/JK4bYeab9WOI8MTJ6gnw==
 
 punycode@^2.1.0, punycode@^2.1.1:
   version "2.3.0"
