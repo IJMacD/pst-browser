@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/pst-browser/static/css/main.94b057c8.css",
-    "main.js": "/pst-browser/static/js/main.07c19f3f.js",
+    "main.js": "/pst-browser/static/js/main.f2658326.js",
     "index.html": "/pst-browser/index.html",
     "main.94b057c8.css.map": "/pst-browser/static/css/main.94b057c8.css.map",
-    "main.07c19f3f.js.map": "/pst-browser/static/js/main.07c19f3f.js.map"
+    "main.f2658326.js.map": "/pst-browser/static/js/main.f2658326.js.map"
   },
   "entrypoints": [
     "static/css/main.94b057c8.css",
-    "static/js/main.07c19f3f.js"
+    "static/js/main.f2658326.js"
   ]
 }
